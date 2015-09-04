@@ -1,0 +1,19 @@
+---
+# Elasticsearch Ansible Variables
+
+elasticsearch_version: 1.7.1
+elasticsearch_apt_java_package: oracle-java8-installer
+elasticsearch_java_home: /usr/lib/jvm/java-8-oracle
+elasticsearch_heap_size: 1g
+elasticsearch_max_open_files: 65535
+elasticsearch_max_locked_memory: unlimited
+elasticsearch_timezone: "Europe/MSK"
+elasticsearch_node_max_local_storage_nodes: 1
+elasticsearch_index_mapper_dynamic: "true"
+elasticsearch_memory_bootstrap_mlockall: "true"
+elasticsearch_install_java: "true"
+elasticsearch_thread_pools:
+  - "threadpool.bulk.type: fixed"
+  - "threadpool.bulk.size: 50"
+  - "threadpool.bulk.queue_size: 1000"
+elasticsearch_discovery_zen_ping_unicast_hosts: '["10.133.35.114", "10.133.35.115", "10.133.35.116"]'

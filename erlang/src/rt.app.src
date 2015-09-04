@@ -1,0 +1,13 @@
+{application, 'rt',
+ [ {description, "An OTP application"}
+ , {vsn, "0.1.0"}
+ , {registered, []}
+ , {mod, {rt_app, []}}
+ , {applications, [kernel, stdlib, erlastic_search]}
+ , {env, []}
+ , {modules, []}
+
+ , {contributors, []}
+ , {licenses, []}
+ , {links, []}
+ ]}.

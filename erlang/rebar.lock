@@ -1,0 +1,12 @@
+[{<<"erlastic_search">>,
+  {git,"git://github.com/tsloughter/erlastic_search.git",
+       {ref,"67c06211c43deb62727e236e9c8a2512eaa40a99"}},
+  0},
+ {<<"hackney">>,{pkg,<<"hackney">>,<<"1.1.0">>},1},
+ {<<"idna">>,{pkg,<<"idna">>,<<"1.0.2">>},2},
+ {<<"iso8601">>,
+  {git,"git://github.com/kivra/erlang_iso8601.git",
+       {ref,"d69a21bc89a62da46334213615a346db8975cfd9"}},
+  0},
+ {<<"jsx">>,{pkg,<<"jsx">>,<<"2.6.2">>},1},
+ {<<"ssl_verify_hostname">>,{pkg,<<"ssl_verify_hostname">>,<<"1.0.5">>},2}].

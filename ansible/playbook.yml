@@ -1,0 +1,18 @@
+---
+# Elasticsearch Ansible Playbook
+
+- hosts: db
+  user: root
+  sudo: yes
+
+  vars_files:
+    - defaults/main.yml
+    - vars/refresh-testing.yml
+
+  tasks:
+    - include: tasks/main.yml
+    # Uncomment to install and enable SPM. Make sure to set the spm_client_token variable in your inventory.ini to your SPM key
+    # - include: tasks/spm.yml
+
+  handlers:
+    - include: handlers/main.yml
