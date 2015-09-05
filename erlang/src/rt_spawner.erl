@@ -14,7 +14,8 @@ start_link() ->
 
 init([]) ->
     init_timer(),
-    {ok, []}.
+    init_collector(),
+    {ok, 0}.
 
 handle_call(_Req, _From, State) ->
     {noreply, State}.
@@ -22,7 +23,14 @@ handle_call(_Req, _From, State) ->
 handle_cast(_Req, State) ->
     {noreply, State}.
 
+handle_info(incr, State) ->
+    {noreply, State + 1};
+handle_info(collect, State) ->
+    io:format("~nCurrent RPS: ~p~n", [State]),
+    init_collector(),
+    {noreply, 0};
 handle_info(init, State) ->
+    Self = self(),
     lists:foreach(fun(_) ->
         spawn(fun() ->
             Msg = generate_message(),
@@ -55,6 +63,7 @@ handle_info(init, State) ->
             %         ok
             % end,
 
+            Self ! incr,
             io:format(".")
         end)
     end, lists:seq(0, ?SPAWN_COUNTER)),
@@ -83,15 +92,20 @@ search(UserId) ->
 search_query(UserId) ->
     [{<<"query">>, [{<<"match">>, [{<<"user_id">>, UserId}]}]}].
 
-init_timer() ->
-    erlang:send_after(?SPAWN_INTERVAL, self(), init).
-
 generate_message() ->
     [ {<<"user_id">>, uuid4()}
     , {<<"owner">>,   <<"John Doe">>}
     , {<<"text">>,    <<"test">>}
     , {<<"date">>,    iso8601:now()}
     ].
+
+% utils
+
+init_timer() ->
+    erlang:send_after(?SPAWN_INTERVAL, self(), init).
+
+init_collector() ->
+    erlang:send_after(?COLLECT_INTERVAL, self(), collect).
 
 uuid4() ->
     <<U0:32, U1:16, _:4, U2:12, _:2, U3:30, U4:32>> = crypto:rand_bytes(16),

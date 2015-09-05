@@ -2,6 +2,7 @@
 
 -define(SPAWN_INTERVAL, 10). % in ms
 -define(SPAWN_COUNTER, 10). % N of spawns at every SPAWN_INTERVAL
+-define(COLLECT_INTERVAL, 1000). % 1 sec
 -define(CHILD(Name, Module, Type, Args),
     {Name, {Module, start_link, Args}, permanent, 5000, Type, [Module]}).
 
