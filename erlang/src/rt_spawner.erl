@@ -26,7 +26,7 @@ handle_cast(_Req, State) ->
 handle_info(incr, State) ->
     {noreply, State + 1};
 handle_info(collect, State) ->
-    io:format("~nCurrent RPS: ~p~n", [State]),
+    io:format("~nCurrent OPS: ~p~n", [State]),
     init_collector(),
     {noreply, 0};
 handle_info(init, State) ->
@@ -34,34 +34,34 @@ handle_info(init, State) ->
     lists:foreach(fun(_) ->
         spawn(fun() ->
             Msg = generate_message(),
-            % UID = lists:keyfind(<<"user_id">>, 1, Msg),
+            UID = lists:keyfind(<<"user_id">>, 1, Msg),
 
             {ok, _} = insert(Msg),
             {ok, RefreshResult} = refresh(),
-            % {ok, SearchResult} = search(UID),
+            {ok, SearchResult} = search(UID),
 
-            % {_, Shards} = lists:keyfind(<<"_shards">>, 1, RefreshResult),
-            % {_, Total}  = lists:keyfind(<<"total">>, 1, Shards),
-            % {_, Succs}  = lists:keyfind(<<"successful">>, 1, Shards),
+            {_, Shards} = lists:keyfind(<<"_shards">>, 1, RefreshResult),
+            {_, Total}  = lists:keyfind(<<"total">>, 1, Shards),
+            {_, Succs}  = lists:keyfind(<<"successful">>, 1, Shards),
 
-            % {_, Hits1} = lists:keyfind(<<"hits">>, 1, SearchResult),
-            % {_, Hits2} = lists:keyfind(<<"hits">>, 1, Hits1),
+            {_, Hits1} = lists:keyfind(<<"hits">>, 1, SearchResult),
+            {_, Hits2} = lists:keyfind(<<"hits">>, 1, Hits1),
 
-            % SearchResultCount = length(Hits2),
+            SearchResultCount = length(Hits2),
 
-            % case Total =:= Succs of
-            %     true ->
-            %         ok;
-            %     false ->
-            %         io:format("ERROR shards total `~p`, successful `~p`~n", [Total, Succs])
-            % end,
+            case Total =:= Succs of
+                true ->
+                    ok;
+                false ->
+                    io:format("~nERROR shards total `~p`, successful `~p`~n", [Total, Succs])
+            end,
 
-            % case SearchResultCount of
-            %     0 ->
-            %         io:format("ERROR in search~n", []);
-            %     _ ->
-            %         ok
-            % end,
+            case SearchResultCount of
+                0 ->
+                    io:format("~nERROR in search~n", []);
+                _ ->
+                    ok
+            end,
 
             Self ! incr,
             io:format(".")
